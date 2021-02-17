@@ -23,6 +23,18 @@
               <div class="media-content">
                 <p class="title is-4"><%= @recipe.title %></p>
               </div>
+              <div class="right mgr-20">
+                  <% if current_user.already_favorited?(@recipe) %> 
+                    <%= link_to recipe_favorites_path(@recipe), method: :delete do %>
+                      <i class="fas fa-heart like-btn"></i>
+                    <% end %>
+                  <% else %>
+                    <%= link_to recipe_favorites_path(@recipe), method: :post do %>
+                      <i class="far fa-heart like-btn"></i>
+                    <% end %>
+                  <% end %>
+                  <%= @recipe.favorites.count %>
+                </div>
             </div>
             <div class="content">
               <table class="table is-narrow">
