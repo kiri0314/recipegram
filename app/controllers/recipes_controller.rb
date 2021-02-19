@@ -1,5 +1,7 @@
 class RecipesController < ApplicationController
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :set_q, only: [:index, :search, :show]
+
 
   def index
     @recipes = Recipe.all.order(id: "DESC")
@@ -44,7 +46,15 @@ class RecipesController < ApplicationController
     redirect_to user_path(recipe.user), notice: "レシピを削除しました。"
   end
 
+  def search
+    @results = @q.result
+  end
+
   private
+  def set_q
+    @q = Recipe.ransack(params[:q])
+  end
+
   def recipe_params
     params.require(:recipe).permit(:title, :body, :image, :comment)
   end

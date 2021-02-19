@@ -1,26 +1,7 @@
-<section class="hero is-success">
-  <div class="hero-body">
-    <div class="container">
-      <h1 class="title">
-        レシピ一覧
-      </h1>
-    </div>
-  </div>
-</section>
-</br>
-<div class="columns is-centered is-vcentered">
-  <dl class="searchbox">
-    <%= search_form_for @q, url: search_recipes_path do |f| %>
-      <dt><%= f.text_field :title_cont ,placeholder: '料理名でレシピをさがす' %></dt>
-      <dd><%= f.submit ("検索") , class: 'search-btn'%></dd>
-    <% end %>
-  </dl>
-</div>
-
 <section class="section">
   <div class="container">
     <div class="columns is-multiline">
-      <% @recipes.each do |recipe| %>
+      <% @results.each do |recipe| %>
         <div class="column is-4">
           <div class="card">
             <div class="card-image">
@@ -42,23 +23,20 @@
                   <div class="title"><%=link_to recipe.user.username, user_path(recipe.user) %></div>
                 </div>
               </div>
-
               <div class="content">
-                
-              
                 <time><%= recipe.updated_at.strftime("%Y-%m-%d %H:%M") %></time>
                 <% if user_signed_in? %>
                   <div class="right">
-                      <% if current_user.already_favorited?(recipe) %> 
-                        <%= link_to recipe_favorites_path(recipe), method: :delete do %>
-                          <i class="fas fa-heart like-btn"></i>
-                        <% end %>
-                      <% else %>
-                        <%= link_to recipe_favorites_path(recipe), method: :post do %>
-                          <i class="far fa-heart like-btn"></i>
-                        <% end %>
+                    <% if current_user.already_favorited?(recipe) %> 
+                      <%= link_to recipe_favorites_path(recipe), method: :delete do %>
+                        <i class="fas fa-heart like-btn"></i>
                       <% end %>
-                      <%= recipe.favorites.count %>
+                    <% else %>
+                      <%= link_to recipe_favorites_path(recipe), method: :post do %>
+                        <i class="far fa-heart like-btn"></i>
+                      <% end %>
+                    <% end %>
+                    <%= recipe.favorites.count %>
                   </div>
                 <% end %>
               </div>
