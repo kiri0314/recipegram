@@ -1,2 +1,64 @@
-<h1>Favorites#index</h1>
-<p>Find me in app/views/favorites/index.html.erb</p>
+<section class="hero is-success">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        いいね一覧
+      </h1>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-multiline">
+      <% @recipes.each do |recipe| %>
+        <div class="column is-4">
+          <div class="card">
+            <div class="card-image">
+              <figure class="image is-4by3">
+                <%= link_to recipe_path(recipe) do %>
+                  <%= attachment_image_tag recipe, :image %>
+                <% end %>
+              </figure>
+            </div>
+            <div class="card-content">
+              <p class="title is-4"><%= recipe.title %></p>
+              <div class="media">
+                <div class="media-left">
+                  <figure class="image is-48x48">
+                    <%= attachment_image_tag recipe.user, :profile_image, fallback: "no-image.png", class: "profile_image" %>
+                  </figure>
+                </div>
+                <div class="media-content">
+                  <div class="title"><%=link_to recipe.user.username, user_path(recipe.user) %></div>
+                </div>
+              </div>
+
+              <div class="content">
+                
+              
+                <time><%= recipe.updated_at.strftime("%Y-%m-%d %H:%M") %></time>
+                <% if user_signed_in? %>
+                  <div class="right">
+                      <% if current_user.already_favorited?(recipe) %> 
+                        <%= link_to recipe_favorites_path(recipe), method: :delete do %>
+                          <i class="fas fa-heart like-btn"></i>
+                        <% end %>
+                      <% else %>
+                        <%= link_to recipe_favorites_path(recipe), method: :post do %>
+                          <i class="far fa-heart like-btn"></i>
+                        <% end %>
+                      <% end %>
+                      <%= recipe.favorites.count %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

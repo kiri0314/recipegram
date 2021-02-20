@@ -1,5 +1,25 @@
 class FavoritesController < ApplicationController
+  before_action :authenticate_user!
   def index
+    @favorites = Favorite.where(user_id: current_user.id)
+    @r = Recipe.all.order(id: "DESC")
+    i = 0
+    @recipes = []
+    @favorites.each do |f|
+      @r.each do |r|
+        if f.recipe_id == r.id  
+          @recipes[i] = r  
+          i = i + 1
+        end 
+      end
+    end
+    # i = 0
+    # @recipes = []
+    # @favorites.each do |f|
+    #   @recipes[i] = Recipe.where(id: f.recipe_id).order(id: "DESC")
+    #   i = i + 1
+    
+    #end 
   end
 
   def create
